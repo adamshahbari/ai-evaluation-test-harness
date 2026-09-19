@@ -1,0 +1,34 @@
+# Demonstrates pairing token_overlap with a negation-sensitive check. Lexical
+# overlap alone scores a reversed policy statement highly; the regex is what
+# actually catches it.
+cases:
+  - id: policy-refund-approved
+    input: "Is a refund approved for order 8812?"
+    expected: "The refund for order 8812 has been approved."
+    actual: "The refund for order 8812 has been approved and will be processed."
+    tags: [policy, refund]
+    threshold: 0.9
+    evaluators:
+      - type: regex
+        weight: 3.0
+        config:
+          pattern: "\\bhas (?!not )been approved\\b"
+      - type: token_overlap
+        weight: 1.0
+        config:
+          method: f1
+          min_score: 0.6
+
+  - id: policy-refund-declined
+    input: "Is a refund approved for order 9001?"
+    expected: "The refund for order 9001 has not been approved."
+    actual: "The refund for order 9001 has not been approved."
+    tags: [policy, refund, negation]
+    threshold: 1.0
+    evaluators:
+      - type: regex
+        weight: 3.0
+        config:
+          pattern: "\\bhas not been approved\\b"
+      - type: exact_match
+        weight: 1.0

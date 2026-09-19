@@ -1,0 +1,45 @@
+cases:
+  - id: extract-invoice-fields
+    input: "Extract the invoice fields as JSON."
+    actual: |
+      {"invoice_id": "INV-2043", "total": 128.50, "currency": "GBP",
+       "line_items": [{"sku": "KB-11", "qty": 2}, {"sku": "MS-04", "qty": 1}]}
+    tags: [extraction, json]
+    threshold: 1.0
+    evaluators:
+      - type: json_schema
+        weight: 2.0
+        config:
+          schema:
+            type: object
+            required: [invoice_id, total, currency, line_items]
+            properties:
+              invoice_id: { type: string, pattern: "^INV-[0-9]{4}$" }
+              total: { type: number, minimum: 0 }
+              currency: { type: string, enum: [GBP, EUR, USD] }
+              line_items:
+                type: array
+                minItems: 1
+                items:
+                  type: object
+                  required: [sku, qty]
+                  properties:
+                    sku: { type: string }
+                    qty: { type: integer, minimum: 1 }
+            additionalProperties: false
+      - type: required_fields
+        config:
+          fields: ["invoice_id", "line_items.0.sku"]
+          values:
+            currency: "GBP"
+            line_items.0.qty: 2
+
+  - id: extract-missing-currency
+    input: "Extract the invoice fields as JSON."
+    actual: '{"invoice_id": "INV-2044", "total": 64.00, "line_items": [{"sku": "KB-11", "qty": 1}]}'
+    tags: [extraction, json, known-gap]
+    threshold: 0.5
+    evaluators:
+      - type: required_fields
+        config:
+          fields: ["invoice_id", "total", "currency", "line_items"]

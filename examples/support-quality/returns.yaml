@@ -1,0 +1,60 @@
+cases:
+  - id: support-return-window
+    input: "How long do I have to return an item?"
+    expected: "You have 30 days from delivery to request a return."
+    actual: "Returns are accepted within 30 days of delivery."
+    tags: [support, refund]
+    threshold: 0.75
+    evaluators:
+      - type: contains
+        weight: 2.0
+        config:
+          values: ["30 days"]
+      - type: not_contains
+        weight: 2.0
+        config:
+          values: ["no refunds", "final sale", "cannot be returned"]
+          ignore_case: true
+      - type: token_overlap
+        weight: 1.0
+        config:
+          method: f1
+          min_score: 0.4
+          stopwords: [a, an, the, of, to, from]
+
+  - id: support-damaged-item
+    input: "My order arrived damaged. What do I do?"
+    expected: "Report damage within 48 hours and we will arrange a replacement."
+    actual: "Please report the damage within 48 hours so we can send a replacement."
+    tags: [support, damage]
+    threshold: 0.8
+    evaluators:
+      - type: contains
+        weight: 2.0
+        config:
+          values: ["48 hours", "replacement"]
+          ignore_case: true
+      - type: token_overlap
+        config:
+          method: f1
+          min_score: 0.5
+
+  - id: support-escalation-tone
+    input: "This is the third time I have contacted you."
+    expected: "Apologise, acknowledge the repeat contact, and escalate."
+    actual: "I am sorry this has taken three attempts. I am escalating your case to a specialist now."
+    tags: [support, tone]
+    threshold: 1.0
+    evaluators:
+      - type: regex
+        config:
+          pattern: "(sorry|apolog)"
+          flags: [IGNORECASE]
+      - type: contains
+        config:
+          values: ["escalat"]
+          ignore_case: true
+      - type: not_contains
+        config:
+          values: ["calm down", "as I already said"]
+          ignore_case: true

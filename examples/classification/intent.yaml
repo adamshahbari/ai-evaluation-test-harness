@@ -1,0 +1,42 @@
+cases:
+  - id: classify-billing-intent
+    input: "I was charged twice for the same order."
+    expected: "billing"
+    actual: "billing"
+    tags: [classification]
+    evaluators:
+      - type: exact_match
+        config:
+          ignore_case: true
+
+  - id: classify-label-in-set
+    input: "Where is my parcel?"
+    actual: "shipping"
+    tags: [classification]
+    evaluators:
+      - type: regex
+        config:
+          pattern: "^(billing|shipping|returns|technical|other)$"
+          mode: fullmatch
+
+  - id: classify-structured-with-confidence
+    input: "My password reset link expired."
+    actual: '{"label": "technical", "confidence": 0.91}'
+    tags: [classification, json]
+    evaluators:
+      - type: composite
+        config:
+          mode: all
+          evaluators:
+            - type: json_schema
+              config:
+                schema:
+                  type: object
+                  required: [label, confidence]
+                  properties:
+                    label: { type: string, enum: [billing, shipping, returns, technical, other] }
+                    confidence: { type: number, minimum: 0, maximum: 1 }
+            - type: required_fields
+              config:
+                values:
+                  label: "technical"
