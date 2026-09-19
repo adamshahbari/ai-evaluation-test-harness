@@ -1,0 +1,7 @@
+# A deliberately malformed suite. CI asserts this exits 3, not 1, so a typo in a
+# test definition is never mistaken for a quality regression.
+cases:
+  - id: no-such-evaluator
+    actual: "anything"
+    evaluators:
+      - type: telepathy

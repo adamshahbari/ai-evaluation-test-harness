@@ -1,0 +1,11 @@
+# A deliberately failing suite. CI asserts this exits 1, which proves the gate
+# reports regressions rather than silently passing.
+cases:
+  - id: regressed-policy
+    expected: "The refund has been approved."
+    actual: "The refund has not been approved."
+    threshold: 1.0
+    evaluators:
+      - type: regex
+        config:
+          pattern: "\\bhas (?!not )been approved\\b"
