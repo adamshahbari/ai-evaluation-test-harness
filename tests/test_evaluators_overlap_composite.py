@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import pytest
-from tests.conftest import make_case
 
 from evalharness.evaluators.base import EvaluatorError
 from evalharness.evaluators.composite import MAX_DEPTH, CompositeEvaluator
 from evalharness.evaluators.overlap import TokenOverlapEvaluator, tokenize
 from evalharness.evaluators.registry import available_evaluators, build_evaluator
+from tests.helpers import make_case
 
 
 class TestTokenOverlap:

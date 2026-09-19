@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import pytest
-from tests.conftest import make_case
 
 from evalharness.evaluators.base import EvaluatorError
 from evalharness.evaluators.fields import RequiredFieldsEvaluator, resolve_path
 from evalharness.evaluators.json_schema import JsonSchemaEvaluator
 from evalharness.evaluators.numeric import NumericToleranceEvaluator, extract_number
 from evalharness.evaluators.regex_eval import RegexEvaluator
+from tests.helpers import make_case
 
 OBJECT_SCHEMA = {"type": "object", "required": ["a"], "properties": {"a": {"type": "integer"}}}
 

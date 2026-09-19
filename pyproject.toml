@@ -40,6 +40,9 @@ packages = ["src/evalharness"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q --strict-markers"
+# Bare `pytest` does not put the project root on sys.path the way
+# `python -m pytest` does; tests/helpers.py must import either way.
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100

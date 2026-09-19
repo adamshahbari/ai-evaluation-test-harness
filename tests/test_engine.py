@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import pytest
-from tests.conftest import make_case
 
 from evalharness.domain.models import Dataset, EvaluatorSpec
 from evalharness.domain.results import Assertion, RunSummary, Status
 from evalharness.engine.runner import evaluate_case, run_dataset
 from evalharness.engine.scoring import weighted_score
+from tests.helpers import make_case
 
 
 def spec(kind: str, weight: float = 1.0, **config) -> EvaluatorSpec:

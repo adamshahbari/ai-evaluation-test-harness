@@ -3,11 +3,10 @@ from __future__ import annotations
 import json
 from xml.etree import ElementTree as ET
 
-from tests.conftest import make_case
-
 from evalharness.domain.models import Dataset, EvaluatorSpec
 from evalharness.engine.runner import run_dataset
 from evalharness.reporting import console, json_report, junit
+from tests.helpers import make_case
 
 
 def summary_fixture():

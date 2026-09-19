@@ -4,25 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from evalharness.domain.models import EvaluatorSpec, TestCase
-
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
-
-
-def make_case(**overrides) -> TestCase:
-    payload = {
-        "id": "case-1",
-        "evaluators": [EvaluatorSpec(type="exact_match")],
-        "expected": "hello",
-        "actual": "hello",
-    }
-    payload.update(overrides)
-    return TestCase(**payload)
-
-
-@pytest.fixture
-def case():
-    return make_case
 
 
 @pytest.fixture

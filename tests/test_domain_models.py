@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 from pydantic import ValidationError
-from tests.conftest import make_case
 
 from evalharness.domain.models import Dataset, EvaluatorSpec, TestCase
+from tests.helpers import make_case
 
 
 def test_case_defaults_to_full_threshold():

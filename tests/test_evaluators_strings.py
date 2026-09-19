@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import pytest
-from tests.conftest import make_case
 
 from evalharness.evaluators.base import EvaluatorError
 from evalharness.evaluators.exact import ExactMatchEvaluator
 from evalharness.evaluators.substring import ContainsEvaluator, NotContainsEvaluator
+from tests.helpers import make_case
 
 
 class TestExactMatch:
